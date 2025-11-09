@@ -1,5 +1,5 @@
 # [PPAAS: PVT and Pareto Aware Analog Sizing Analog Sizing via Goal-conditioned Reinforcement Learning](https://arxiv.org/abs/2507.17003) (ICCAD 2025)
-By Seunggeun Kim, Ziyi Wang, Sungyoung Lee, Youngmin Oh, Hanqing Zhu, Doyun Kim, and David Z. Pan
+By [Seunggeun Kim](https://seunggeunkimkr.github.io), Ziyi Wang, Sungyoung Lee, Youngmin Oh, Hanqing Zhu, Doyun Kim, and David Z. Pan
 
 [![arXiv](https://img.shields.io/badge/arXiv-2406.07524-red.svg)](https://arxiv.org/abs/2507.17003)
 
