@@ -48,7 +48,12 @@ class train_callback(BaseCallback):
         self.temp = temp
         self.pareto_freq = pareto_freq
 
+        self.step_count = 0
+        self.curr_spec = None
+
     def _on_step(self) -> bool:
+        self.step_count += 1
+
         if self.SoF:
             if self.locals["infos"][0].get("tt_done"):
                 self.total_sim += self.num_corners
@@ -63,6 +68,7 @@ class train_callback(BaseCallback):
         pareto_buffer_size = self.locals["infos"][0].get("pareto_buffer_size", 0)
         wandb.log(
             {
+                "step_count": self.step_count,
                 "tt_sim": self.tt_sim,
                 "full_sim": self.full_sim,
                 "total_sim": self.total_sim,
@@ -70,6 +76,36 @@ class train_callback(BaseCallback):
                 "pareto_buffer_size": pareto_buffer_size,
             }
         )
+
+        training_spec = self.training_env.env_method("get_specs_ideal")
+        if self.curr_spec == None:
+            self.curr_spec = training_spec
+
+        if not np.array_equal(training_spec, self.curr_spec):
+            self.curr_spec = training_spec
+            with open(
+                os.path.join(path, "train_log.csv"), mode="a", newline=""
+            ) as train_log_file:
+                train_log_writer = csv.writer(train_log_file)
+
+                specs = training_spec[0]
+                assert len(specs) == 6
+                train_log_writer.writerow(
+                    [
+                        self.step_count,
+                        self.tt_sim,
+                        self.full_sim,
+                        self.total_sim,
+                        ep_corner_norm_std,
+                        pareto_buffer_size,
+                        specs[0],
+                        specs[1],
+                        specs[2],
+                        specs[3],
+                        specs[4],
+                        specs[5],
+                    ]
+                )
 
         # Pareto Dominant Goal Sampling
         if self.pareto_freq > 0:
