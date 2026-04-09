@@ -1,8 +1,8 @@
 * Two_stage_amp test with subcircuit structure
 
-.include "../../../pdk/gf180/ngspice/design.ngspice"
+.include "/home/pham/code/analog-ml/PPAAS/eval_engines/pdk/gf180/ngspice/design.ngspice"
 
-.lib "../../../pdk/gf180/ngspice/sm141064.ngspice" fs
+.lib "/home/pham/code/analog-ml/PPAAS/eval_engines/pdk/gf180/ngspice/sm141064.ngspice" fs
 
 .param wp1=100.0u  lp1=300n mp1=1
 .param wn1=8.05u  ln1=300n mn1=1

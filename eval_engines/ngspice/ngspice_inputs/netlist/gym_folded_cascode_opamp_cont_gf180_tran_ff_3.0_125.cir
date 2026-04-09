@@ -1,8 +1,8 @@
 folded_cascode_amp test
 
-.include "../../../pdk/gf180/ngspice/design.ngspice"
+.include "/home/pham/code/analog-ml/PPAAS/eval_engines/pdk/gf180/ngspice/design.ngspice"
 
-.lib "../../../pdk/gf180/ngspice/sm141064.ngspice" ff
+.lib "/home/pham/code/analog-ml/PPAAS/eval_engines/pdk/gf180/ngspice/sm141064.ngspice" ff
 
 
 .param wp11=1.0e-6 lp11=300.0e-9 mp11=1

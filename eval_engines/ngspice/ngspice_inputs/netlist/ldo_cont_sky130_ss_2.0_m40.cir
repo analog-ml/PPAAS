@@ -2,7 +2,7 @@
 * Instead just load tt corner which is faster
 .param mc_mm_switch=0
 .param mc_pr_switch=0
-.include "../../../pdk/sky130A/libs.tech/ngspice/corners/ss.spice"
+.include "/home/pham/code/analog-ml/PPAAS/eval_engines/pdk/sky130A/libs.tech/ngspice/corners/ss.spice"
 *.include "../../../pdk/sky130A/libs.tech/ngspice/corners/tt/specialized_cells.spice"
 
 

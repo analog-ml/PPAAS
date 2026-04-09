@@ -1,8 +1,8 @@
 comparator test
 
-.include "../../../pdk/gf180/ngspice/design.ngspice"
+.include "/home/pham/code/analog-ml/PPAAS/eval_engines/pdk/gf180/ngspice/design.ngspice"
 
-.lib "../../../pdk/gf180/ngspice/sm141064.ngspice" typical
+.lib "/home/pham/code/analog-ml/PPAAS/eval_engines/pdk/gf180/ngspice/sm141064.ngspice" typical
 
 .param sw_stat_global = 0
 .param sw_stat_mismatch = 0
