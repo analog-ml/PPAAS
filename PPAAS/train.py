@@ -552,6 +552,7 @@ def main(**kwargs):
     eval_env_config["online_goal"] = False
 
     if cfg.algo == "HER":
+        # For HER, we use the goal-conditioned version of the environment
         sim_env = ngspice_env_goal
     else:
         sim_env = ngspice_env_cont
