@@ -15,6 +15,7 @@ from typing import Callable
 import wandb
 from wandb.integration.sb3 import WandbCallback
 from types import SimpleNamespace
+
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
 )
@@ -66,7 +67,7 @@ class train_callback(BaseCallback):
                 "full_sim": self.full_sim,
                 "total_sim": self.total_sim,
                 "ep_corner_norm_std": ep_corner_norm_std,
-                "pareto_buffer_size": pareto_buffer_size
+                "pareto_buffer_size": pareto_buffer_size,
             }
         )
 
@@ -123,7 +124,7 @@ class train_callback(BaseCallback):
                         dist = torch.distributions.Categorical(probs)
                         sampled_goal_idx = dist.sample().cpu().item()
 
-                    else: #random sampling
+                    else:  # random sampling
                         sampled_goal_idx = 0
                         probs = torch.zeros(num_goals)
                         probs[sampled_goal_idx] = 1
@@ -268,10 +269,7 @@ class custom_eval_callback(BaseCallback):
     required=True,
 )
 @click.option(
-    "--lr", 
-    help="Initial learning rate", 
-    type=float, default=3e-3, 
-    required=True
+    "--lr", help="Initial learning rate", type=float, default=3e-3, required=True
 )
 @click.option(
     "--n_goal",
@@ -289,13 +287,7 @@ class custom_eval_callback(BaseCallback):
     default="future",
     required=True,
 )
-@click.option(
-    "--gamma", 
-    help="Discount factor",
-    type=float, 
-    default=0.9, 
-    required=True
-)
+@click.option("--gamma", help="Discount factor", type=float, default=0.9, required=True)
 @click.option(
     "--tau",
     help="Target smoothing coefficient",
@@ -315,7 +307,7 @@ class custom_eval_callback(BaseCallback):
     "--seed", help="Random seed (optional)", type=int, default=50, required=True
 )
 
-#wandb options
+# wandb options
 @click.option(
     "--name",
     help="Name of the run",
@@ -344,7 +336,7 @@ class custom_eval_callback(BaseCallback):
     default="comp",
     required=True,
 )
-#logging & evaluation options
+# logging & evaluation options
 @click.option(
     "--log_interval",
     help="Logging(save model) interval",
@@ -378,7 +370,7 @@ class custom_eval_callback(BaseCallback):
     required=False,
 )
 
-#environment options
+# environment options
 @click.option(
     "--yaml",
     "CIR_YAML",
@@ -459,7 +451,13 @@ class custom_eval_callback(BaseCallback):
     default=-3.0,
     required=False,
 )
-@click.option("--concat_all_specs", help="Concat all specs", type=bool, default=False, required=False)
+@click.option(
+    "--concat_all_specs",
+    help="Concat all specs",
+    type=bool,
+    default=False,
+    required=False,
+)
 @click.option(
     "--conservative",
     help="conservative virtual reward",
@@ -482,7 +480,7 @@ class custom_eval_callback(BaseCallback):
     required=False,
 )
 
-#PGDS options
+# PGDS options
 @click.option(
     "--pareto_freq",
     help="Pareto goal sampling frequency",
@@ -491,13 +489,16 @@ class custom_eval_callback(BaseCallback):
     required=False,
 )
 @click.option(
-    "--obj_style", help="PGDS sampling strategy", type=str, default="softmax", required=False
+    "--obj_style",
+    help="PGDS sampling strategy",
+    type=str,
+    default="softmax",
+    required=False,
 )
 @click.option(
     "--temp", help="sampling temperature", type=float, default=10.0, required=False
 )
 @click.option("--n_warmup", help="warmup size", type=int, default=2, required=False)
-
 def main(**kwargs):
     cfg = SimpleNamespace(**kwargs)
     env_config = {key: value for key, value in kwargs.items() if value is not None}
@@ -528,12 +529,10 @@ def main(**kwargs):
     torch.manual_seed(seed)
     set_random_seed(seed)
 
-    envs.tt_sim = 0
-    envs.full_sim = 0
+    envs.tt_sim = 0  # number of simulations that meet the TT condition
+    envs.full_sim = 0  # number of simulations that run through all corners
 
-    policy_kwargs = dict(
-        net_arch=dict(pi=[256, 256, 256, 256], qf=[256, 256, 128])
-    )
+    policy_kwargs = dict(net_arch=dict(pi=[256, 256, 256, 256], qf=[256, 256, 128]))
 
     wandb.tensorboard.patch(root_logdir="./wandb_results/")
     run = wandb.init(
@@ -549,7 +548,7 @@ def main(**kwargs):
             "n_sample_goal": cfg.n_sample_goal,
             "goal_selection_strategy": cfg.goal_selection_strategy,
             "gamma": cfg.gamma,
-            "tau": cfg.tau
+            "tau": cfg.tau,
         },
         dir="./wandb_results",
         reinit=True,
@@ -618,9 +617,7 @@ def main(**kwargs):
             seed=seed,
         )
 
-    tb_log_base = (
-        f"{cfg.algo}_{cfg.env_name}_{cfg.name}"
-    )
+    tb_log_base = f"{cfg.algo}_{cfg.env_name}_{cfg.name}"
     #########load model #######
     # model = SAC.load(tb_log_base, env=envs)
     # model.load_replay_buffer(tb_log_base)
